@@ -1,0 +1,62 @@
+{
+  "news": [
+    {
+      "id": 1,
+      "title": "Verstappen Dominates Again",
+      "category": "Race Report",
+      "categoryColor": "red",
+      "summary": "A masterclass performance in the latest Grand Prix sees Max take another win.",
+      "timestamp": "2026-05-21T14:30:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Ferrari Strategy Woes?",
+      "category": "Analysis",
+      "categoryColor": "yellow",
+      "summary": "Experts discuss the pit stop calls that cost Leclerc a podium finish.",
+      "timestamp": "2026-05-20T09:15:00Z"
+    },
+    {
+      "id": 3,
+      "title": "New Regulations 2026",
+      "category": "Tech",
+      "categoryColor": "blue",
+      "summary": "What the new engine rules mean for the grid order next season.",
+      "timestamp": "2026-05-19T11:45:00Z"
+    },
+    {
+        "id": 4,
+        "title": "Alonso's Masterplan",
+        "category": "Rumor",
+        "categoryColor": "green",
+        "summary": "Is he really planning to race until he is 50? Sources say maybe.",
+         "timestamp": "2026-05-18T16:20:00Z"
+    }
+  ],
+  "threads": [
+    {
+      "id": 1,
+      "title": "Best race of the hybrid era?",
+      "author": "F1_Fan_99",
+      "replies": 42,
+      "lastPost": "2 hours ago",
+      "active": true
+    },
+    {
+      "id": 2,
+      "title": "2026 Engine Regs Discussion",
+      "author": "TechGuru",
+      "replies": 12,
+      "lastPost": "Yesterday",
+       "active": false
+    },
+    {
+      "id": 3,
+      "title": "Driver of the Day?",
+      "author": "SpeedDemon",
+      "replies": 156,
+      "lastPost": "5 mins ago",
+       "active": true
+    }
+  ]
+}

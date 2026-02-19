@@ -1,0 +1,28 @@
+/* Custom styles for F1 Blog */
+
+/* Example of a custom utility if needed, mostly using Tailwind classes */
+.f1-red {
+    color: #e10600;
+}
+
+.bg-f1-red {
+    background-color: #e10600;
+}
+
+/* Scrollbar customization for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
