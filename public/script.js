@@ -37,7 +37,8 @@ async function loadNews() {
     if (!newsContainer) return;
 
     try {
-        const response = await fetch('db.json');
+        const response = await fetch('../db.json');
+
         const data = await response.json();
         const news = data.news;
 
@@ -65,7 +66,7 @@ async function loadForumThreads() {
     if (!threadsContainer) return;
 
     try {
-        const response = await fetch('db.json');
+        const response = await fetch('../db.json');
         const data = await response.json();
         const threads = data.threads;
 
