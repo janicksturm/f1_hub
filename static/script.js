@@ -10,64 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (page === 'forum.html') {
         loadForumThreads();
         setupNewThreadButton();
-    } else if (page === 'login.html') {
-        setupAuthForm('Login');
-    } else if (page === 'register.html') {
-        setupAuthForm('Register');
-    } else if (page === 'success.html') {
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('username') || 'Racer';
-        const display = document.getElementById('username-display');
-        if (display) display.textContent = username;
     }
 });
-
-function setupAuthForm(type) {
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (type === 'Register') {
-                const username = document.getElementById('username').value;
-                const email = document.getElementById('email').value;
-                try {
-                    // For a real app, you'd POST to an API.
-                    // Here we just redirect to simulate success
-
-                    // Optional: If using a real json-server, you could actually POST:
-                    /*
-                    await fetch('http://localhost:3000/users', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username, email })
-                    });
-                    */
-                    window.location.href = `success.html?username=${encodeURIComponent(username)}`;
-
-                } catch (error) {
-                    console.error('Registration failed:', error);
-                    alert('Registration failed!');
-                }
-
-            } else {
-                // Login Flow
-                const email = document.getElementById('email').value;
-                alert(`${type} successful for ${email}! Redirecting to home...`);
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            }
-        });
-    }
-}
 
 async function loadNews() {
     const newsContainer = document.getElementById('news-container');
     if (!newsContainer) return;
 
     try {
-        const response = await fetch('http://localhost:8000/news');
+        const response = await fetch('/news');
 
         const data = await response.json();
         const news = data.news;
@@ -93,11 +44,11 @@ async function loadNews() {
 }
 
 async function loadForumThreads() {
-    const threadsContainer = document.querySelector('ul'); // Targeting the list in forum.html
+    const threadsContainer = document.querySelector('ul');
     if (!threadsContainer) return;
 
     try {
-        const response = await fetch('../db.json');
+        const response = await fetch('/threads');
         const data = await response.json();
         const threads = data.threads;
 

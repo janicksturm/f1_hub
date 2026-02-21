@@ -1,21 +1,14 @@
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, constr, EmailStr
 from src.password_utils import hash_password, validate_password
 from src.database import Database
-from fastapi.middleware.cors import CORSMiddleware
 from src.news_utils import get_top_6_articles
 
 app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.mount("/public", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="public")
 
@@ -28,6 +21,14 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: constr(min_length=8)
 
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/forum")
+async def forum(request: Request):
+    return templates.TemplateResponse("forum.html", {"request": request})
+
 @app.get("/success")
 async def success(request: Request):
     return templates.TemplateResponse("success.html", {"request": request})
@@ -35,6 +36,10 @@ async def success(request: Request):
 @app.get("/login")
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/register")
+async def register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
 
 @app.post("/register")
 async def register(username: str = Form(...), email: str = Form(...), password: str = Form(...)):
