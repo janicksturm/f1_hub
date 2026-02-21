@@ -2,6 +2,8 @@
 
 A full-stack web application for Formula 1 news and discussions. Built with FastAPI, SQLite, Python, HTML, Tailwind CSS and JavaScript.
 
+> **Note:** This project is currently in active development. Some features and functionality are not yet implemented.
+
 ## Features
 
 - **Homepage**: Latest F1 news feed fetched using NewsAPI
