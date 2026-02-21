@@ -4,8 +4,18 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, constr, EmailStr
 from src.password_utils import hash_password, validate_password
 from src.database import Database
+from fastapi.middleware.cors import CORSMiddleware
+from src.news_utils import get_top_6_articles
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 templates = Jinja2Templates(directory="public")
 
@@ -35,3 +45,7 @@ async def register(username: str = Form(...), email: str = Form(...), password: 
     db.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", (user.username, user.email, user.password))
 
     return RedirectResponse(url="/success", status_code=303)
+
+@app.get("/news")
+async def get_news():
+    return {"news": get_top_6_articles()}

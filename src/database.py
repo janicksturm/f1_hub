@@ -14,8 +14,9 @@ class Database:
         self.conn.close()
 
     def execute(self, query, params=()):
-        self.cursor.execute(query, params)
+        result = self.cursor.execute(query, params)
         self.conn.commit()
+        return result
 
     def create_user_table(self):
         self.execute("""
