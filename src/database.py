@@ -18,14 +18,16 @@ class Database:
         self.conn.commit()
         return result
 
+    def fetchone(self, query, params=()):
+        return self.cursor.execute(query, params).fetchone()
+
     def create_user_table(self):
         self.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL UNIQUE,
                 email TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL
+                password TEXT NOT NULL,
+                joined_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
-    
-    
