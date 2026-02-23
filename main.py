@@ -65,9 +65,21 @@ async def login_post(request: Request, email: str = Form(...), password: str = F
     user = cursor.fetchone()
     if user:
         if validate_password(password, user[3]):
-            response = RedirectResponse(url=request.headers.get("referer"), status_code=303)
-            response.set_cookie(key="user_id", value=user[0])
-            response.set_cookie(key="username", value=user[1])
+            response = RedirectResponse(url="/dashboard", status_code=303)
+            response.set_cookie(
+                key="user_id",
+                value=user[0],
+                httponly=True,
+                secure=True,
+                max_age=60 * 60 * 24
+            )
+            response.set_cookie(
+                key="username",
+                value=user[1],
+                httponly=True,
+                secure=True,
+                max_age=60 * 60 * 24
+            )
             return response
     return RedirectResponse(url="/login", status_code=303)
 
