@@ -104,6 +104,16 @@ async def dashboard(request: Request):
         }
     )
 
+@app.get("/api/user")
+async def get_user(request: Request):
+    user_id = request.cookies.get("user_id")
+    if user_id:
+        cursor = db.execute("SELECT joined_at FROM users WHERE id = ?", (user_id,))
+        user = cursor.fetchone()
+        if user:
+            return {"joined_at": user[0]}
+    return {"error": "User not found"}
+
 @app.get("/register")
 async def register(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
