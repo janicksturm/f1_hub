@@ -92,7 +92,7 @@ async def login_post(request: Request, email: str = Form(...), password: str = F
 
 @app.get("/logout")
 async def logout(request: Request):
-    response = RedirectResponse(url=request.headers.get("referer"), status_code=303)
+    response = RedirectResponse(url="/", status_code=303)
     response.delete_cookie("user_id")
     response.delete_cookie("username")
     return response
