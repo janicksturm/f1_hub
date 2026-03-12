@@ -43,7 +43,7 @@ function getThreads() {
                 data.threads.forEach(thread => {
                     const threadElement = document.createElement('li');
                     threadElement.innerHTML = `
-                        <a href="#" class="block hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out">
+                        <a href="#" id="thread-link" class="block hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out">
                             <div class="px-4 py-4 sm:px-6">
                                 <div class="flex items-center justify-between">
                                     <div class="text-sm leading-5 font-medium text-red-600 truncate">
@@ -65,6 +65,13 @@ function getThreads() {
                         </a>
                     `;
                     threadElement.className = "border-b border-gray-200";
+
+                    threadElement.querySelector("#thread-link")
+                        .addEventListener("click", (e) => {
+                            e.preventDefault();
+                            window.location.href = `/forum/thread/${thread[0]}`;
+                        });
+
                     threadsContainer.appendChild(threadElement);
                 });
             }

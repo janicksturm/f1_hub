@@ -58,6 +58,21 @@ async def forum(request: Request):
         }
     )
 
+@app.get("/forum/thread/{thread_id}")
+async def thread_page(request: Request, thread_id: int):
+    user_id = request.cookies.get("user_id")
+    username = request.cookies.get("username")
+
+    return templates.TemplateResponse(
+        "thread.html",
+        {
+            "request": request,
+            "user_id": user_id,
+            "username": username,
+            "thread_id": thread_id
+        }
+    )
+
 @app.get("/success")
 async def success(request: Request):
     return templates.TemplateResponse("success.html", {"request": request})
@@ -149,6 +164,19 @@ async def create_thread(request: Request, title: str = Form(...), content: str =
         db.execute("INSERT INTO threads (user_id, title, content, created_at) VALUES (?, ?, ?, ?)", (thread.user_id, thread.title, thread.content, thread.created_at))
         return RedirectResponse(url="/forum", status_code=303)
     return {"error": "User not found"}
+
+@app.get("/api/threads/{thread_id}")
+async def get_thread(thread_id: int):
+    cursor = db.execute("""
+        SELECT threads.*, users.username 
+        FROM threads 
+        JOIN users ON threads.user_id = users.id
+        WHERE threads.id = ?
+    """, (thread_id,))
+    thread = cursor.fetchone()
+    if thread:
+        return {"thread": thread}
+    return {"error": "Thread not found"}
 
 @app.get("/api/threads/number")
 async def count_thread(request: Request):
