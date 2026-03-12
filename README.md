@@ -2,7 +2,7 @@
 
 A full-stack web application for Formula 1 news and discussions. Built with FastAPI, SQLite, Python, HTML, Tailwind CSS and JavaScript.
 
-> **Note:** This project is currently in active development. Some features and functionality are not yet implemented.
+> **Note:** This project was built primarily as a learning exercise and is not meant to be a flawless or production-ready application, and you may find some rough edges or missing features.
 
 ## Features
 
