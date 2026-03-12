@@ -150,6 +150,15 @@ async def create_thread(request: Request, title: str = Form(...), content: str =
         return RedirectResponse(url="/forum", status_code=303)
     return {"error": "User not found"}
 
+@app.get("/api/threads/number")
+async def count_thread(request: Request):
+    user_id = request.cookies.get("user_id")
+    if user_id:
+        cursor = db.execute("SELECT COUNT(*) FROM threads WHERE user_id = ?", (user_id,))
+        count = cursor.fetchone()[0]
+        return {"count": count}
+    return {"error": "User not found"}
+
 @app.get("/register")
 async def register(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
