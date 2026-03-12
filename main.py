@@ -17,6 +17,7 @@ db = Database("data/f1_forum.db")
 db.connect()
 db.create_user_table()
 db.create_thread_table()
+db.create_comment_table()
 
 class UserCreate(BaseModel):
     username: constr(min_length=3, max_length=12)
@@ -27,6 +28,12 @@ class UserCreate(BaseModel):
 class ThreadCreate(BaseModel):
     user_id: int
     title: str
+    content: str
+    created_at: date
+
+class CommentCreate(BaseModel):
+    thread_id: int
+    user_id: int
     content: str
     created_at: date
 
@@ -165,6 +172,15 @@ async def create_thread(request: Request, title: str = Form(...), content: str =
         return RedirectResponse(url="/forum", status_code=303)
     return {"error": "User not found"}
 
+@app.get("/api/threads/number")
+async def count_thread(request: Request):
+    user_id = request.cookies.get("user_id")
+    if user_id:
+        cursor = db.execute("SELECT COUNT(*) FROM threads WHERE user_id = ?", (user_id,))
+        count = cursor.fetchone()[0]
+        return {"count": count}
+    return {"error": "User not found"}
+
 @app.get("/api/threads/{thread_id}")
 async def get_thread(thread_id: int):
     cursor = db.execute("""
@@ -178,13 +194,28 @@ async def get_thread(thread_id: int):
         return {"thread": thread}
     return {"error": "Thread not found"}
 
-@app.get("/api/threads/number")
-async def count_thread(request: Request):
+@app.get("/api/threads/{thread_id}/comments")
+async def get_comments(thread_id: int):
+    cursor = db.execute("""
+        SELECT comments.*, users.username 
+        FROM comments 
+        JOIN users ON comments.user_id = users.id
+        WHERE comments.thread_id = ?
+        ORDER BY comments.created_at ASC
+    """, (thread_id,))
+    comments = cursor.fetchall()
+    return {"comments": comments}
+
+@app.post("/api/threads/{thread_id}/comments/create")
+async def create_comment(request: Request, thread_id: int, content: str = Form(...)):
     user_id = request.cookies.get("user_id")
+
     if user_id:
-        cursor = db.execute("SELECT COUNT(*) FROM threads WHERE user_id = ?", (user_id,))
-        count = cursor.fetchone()[0]
-        return {"count": count}
+        comment = CommentCreate(thread_id=thread_id, user_id=int(user_id), content=content, created_at=date.today())
+
+        db.execute("INSERT INTO comments (thread_id, user_id, content, created_at) VALUES (?, ?, ?, ?)", 
+                   (comment.thread_id, comment.user_id, comment.content, comment.created_at))
+        return RedirectResponse(url=f"/forum/thread/{thread_id}", status_code=303)
     return {"error": "User not found"}
 
 @app.get("/register")

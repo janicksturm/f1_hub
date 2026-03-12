@@ -43,3 +43,16 @@ class Database:
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
         """)
+
+    def create_comment_table(self):
+        self.execute("""
+            CREATE TABLE IF NOT EXISTS comments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                thread_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                content TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (thread_id) REFERENCES threads(id),
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
