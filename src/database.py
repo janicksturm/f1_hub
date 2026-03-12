@@ -31,3 +31,15 @@ class Database:
                 joined_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
+
+    def create_thread_table(self):
+        self.execute("""
+            CREATE TABLE IF NOT EXISTS threads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                title TEXT NOT NULL,
+                content TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)

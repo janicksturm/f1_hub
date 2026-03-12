@@ -16,12 +16,19 @@ templates = Jinja2Templates(directory="public")
 db = Database("data/f1_forum.db")
 db.connect()
 db.create_user_table()
+db.create_thread_table()
 
 class UserCreate(BaseModel):
     username: constr(min_length=3, max_length=12)
     email: EmailStr
     password: constr(min_length=8)
     joined_at: date
+
+class ThreadCreate(BaseModel):
+    user_id: int
+    title: str
+    content: str
+    created_at: date
 
 @app.get("/")
 async def index(request: Request):
@@ -112,6 +119,35 @@ async def get_user(request: Request):
         user = cursor.fetchone()
         if user:
             return {"joined_at": user[0]}
+    return {"error": "User not found"}
+
+@app.get("/api/session")
+async def get_session(request: Request):
+    user_id = request.cookies.get("user_id")
+    if user_id:
+        return {"user_id": user_id}
+    return {"error": "User not found"}
+
+@app.get("/api/threads")
+async def get_threads(request: Request):
+    cursor = db.execute("""
+        SELECT threads.*, users.username 
+        FROM threads 
+        JOIN users ON threads.user_id = users.id
+        ORDER BY threads.created_at DESC
+    """)
+    threads = cursor.fetchall()
+    return {"threads": threads}
+
+@app.post("/api/threads/create")
+async def create_thread(request: Request, title: str = Form(...), content: str = Form("")):
+    user_id = request.cookies.get("user_id")
+
+    if user_id:
+        thread = ThreadCreate(user_id=int(user_id), title=title, content=content, created_at=date.today())
+
+        db.execute("INSERT INTO threads (user_id, title, content, created_at) VALUES (?, ?, ?, ?)", (thread.user_id, thread.title, thread.content, thread.created_at))
+        return RedirectResponse(url="/forum", status_code=303)
     return {"error": "User not found"}
 
 @app.get("/register")
