@@ -17,7 +17,10 @@ A full-stack web application for Formula 1 news and discussions. Built with Fast
 *Homepage displaying fetched F1 news*
 
 ![Forum Screenshot](assets/forum-screenshot.jpeg)  
-*Forum page with discussion threads*
+*Forum page*
+
+![Comments/discussion Page](assets/comments-screenshot.jpeg)  
+*Comments/discussion page for a specific thread*
 
 ![Login Screenshot](assets/login-screenshot.jpeg)  
 *Authentication page for users*
